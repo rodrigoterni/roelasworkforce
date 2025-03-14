@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Employee {
+  id                Int          @id @default(autoincrement())
+  name              String
+  email             String       @unique
+  telephone         String
+  cpf               String       @unique // Brazilian tax ID (CPF)
+  rg                String       // Brazilian ID document (RG)
+  hireDate          DateTime
+  isActive          Boolean      @default(true)
+  
+  // Financial information
+  salary            Float
+  weekendRate       Float        // Additional rate for weekend work
+  holidayRate       Float        // Additional rate for holiday work
+  weekendsWorked    Int          @default(0)
+  holidaysWorked    Int          @default(0)
+  
+  // Benefits
+  hasInsurance      Boolean      @default(false)
+  insuranceAmount   Float        @default(0)
+  hasTransportFee   Boolean      @default(false)
+  transportFeeDaily Float        @default(0)
+  hasFoodSupport    Boolean      @default(false)
+  foodSupportAmount Float        @default(0)
+  
+  // Bank information
+  bankName          String
+  bankBranch        String       // "Agência"
+  bankAccount       String
+  bankPix           String
+  
+  // Timestamps and relations
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  shifts            Shift[]
+  timeEntries       TimeEntry[]
+}
+
+model Shift {
+  id                Int          @id @default(autoincrement())
+  startTime         DateTime
+  endTime           DateTime
+  isWeekend         Boolean      @default(false)
+  isHoliday         Boolean      @default(false)
+  employee          Employee     @relation(fields: [employeeId], references: [id])
+  employeeId        Int
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  timeEntries       TimeEntry[]
+}
+
+model TimeEntry {
+  id                Int          @id @default(autoincrement())
+  clockIn           DateTime
+  clockOut          DateTime?
+  employee          Employee     @relation(fields: [employeeId], references: [id])
+  employeeId        Int
+  shift             Shift        @relation(fields: [shiftId], references: [id])
+  shiftId           Int
+  notes             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model Holiday {
+  id                Int          @id @default(autoincrement())
+  name              String
+  date              DateTime
+  isNational        Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
