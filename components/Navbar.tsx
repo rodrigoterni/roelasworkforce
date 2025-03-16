@@ -39,10 +39,28 @@ export default function Navbar() {
                   Turnos
                 </Link>
                 <Link 
+                  href="/monthly-records/add" 
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/monthly-records')}`}
+                >
+                  Registros Mensais
+                </Link>
+                <Link 
                   href="/payroll" 
                   className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/payroll')}`}
                 >
                   Folha de Pagamento
+                </Link>
+                <Link 
+                  href="/agent" 
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/agent')}`}
+                >
+                  AI Assistant
+                </Link>
+                <Link 
+                  href="/mcp-test" 
+                  className={`px-3 py-2 rounded-md text-sm font-medium ${isActive('/mcp-test')}`}
+                >
+                  MCP Test
                 </Link>
               </div>
             </div>
@@ -87,10 +105,28 @@ export default function Navbar() {
             Turnos
           </Link>
           <Link 
+            href="/monthly-records/add" 
+            className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/monthly-records')}`}
+          >
+            Registros Mensais
+          </Link>
+          <Link 
             href="/payroll" 
             className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/payroll')}`}
           >
             Folha de Pagamento
+          </Link>
+          <Link 
+            href="/agent" 
+            className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/agent')}`}
+          >
+            AI Assistant
+          </Link>
+          <Link 
+            href="/mcp-test" 
+            className={`block px-3 py-2 rounded-md text-base font-medium ${isActive('/mcp-test')}`}
+          >
+            MCP Test
           </Link>
         </div>
       </div>

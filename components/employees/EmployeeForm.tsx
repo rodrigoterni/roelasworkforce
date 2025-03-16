@@ -185,7 +185,7 @@ export default function EmployeeForm({ employee, isEditing = false }: EmployeeFo
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700">Taxa de Fim de Semana (%)</label>
+            <label className="block text-sm font-medium text-gray-700">Taxa de Fim de Semana (R$)</label>
             <input
               type="number"
               name="weekendRate"
@@ -199,7 +199,7 @@ export default function EmployeeForm({ employee, isEditing = false }: EmployeeFo
           </div>
           
           <div>
-            <label className="block text-sm font-medium text-gray-700">Taxa de Feriado (%)</label>
+            <label className="block text-sm font-medium text-gray-700">Taxa de Feriado (R$)</label>
             <input
               type="number"
               name="holidayRate"

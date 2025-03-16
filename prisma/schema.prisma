@@ -9,46 +9,47 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Employee {
-  id                Int          @id @default(autoincrement())
+  id                Int                @id @default(autoincrement())
   name              String
-  email             String       @unique
+  email             String             @unique
   telephone         String
-  cpf               String       @unique // Brazilian tax ID (CPF)
-  rg                String       // Brazilian ID document (RG)
+  cpf               String             @unique // Brazilian tax ID (CPF)
+  rg                String             // Brazilian ID document (RG)
   hireDate          DateTime
-  isActive          Boolean      @default(true)
+  isActive          Boolean            @default(true)
   
   // Financial information
   salary            Float
-  weekendRate       Float        // Additional rate for weekend work
-  holidayRate       Float        // Additional rate for holiday work
-  weekendsWorked    Int          @default(0)
-  holidaysWorked    Int          @default(0)
+  weekendRate       Float              // Dollar amount for weekend work (was previously a percentage)
+  holidayRate       Float              // Dollar amount for holiday work (was previously a percentage)
+  weekendsWorked    Int                @default(0)
+  holidaysWorked    Int                @default(0)
   
   // Benefits
-  hasInsurance      Boolean      @default(false)
-  insuranceAmount   Float        @default(0)
-  hasTransportFee   Boolean      @default(false)
-  transportFeeDaily Float        @default(0)
-  hasFoodSupport    Boolean      @default(false)
-  foodSupportAmount Float        @default(0)
+  hasInsurance      Boolean            @default(false)
+  insuranceAmount   Float              @default(0)
+  hasTransportFee   Boolean            @default(false)
+  transportFeeDaily Float              @default(0)
+  hasFoodSupport    Boolean            @default(false)
+  foodSupportAmount Float              @default(0)
   
   // Bank information
   bankName          String
-  bankBranch        String       // "Agência"
+  bankBranch        String             // "Agência"
   bankAccount       String
   bankPix           String
   
   // Timestamps and relations
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   shifts            Shift[]
   timeEntries       TimeEntry[]
+  monthlyRecords    MonthlyWorkRecord[]
 }
 
 model Shift {
@@ -84,4 +85,22 @@ model Holiday {
   isNational        Boolean      @default(true)
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
+}
+
+model MonthlyWorkRecord {
+  id                Int          @id @default(autoincrement())
+  employee          Employee     @relation(fields: [employeeId], references: [id])
+  employeeId        Int
+  year              Int
+  month             Int
+  weekendsWorked    Int
+  holidaysWorked    Int
+  weekendAmount     Float        // Calculated amount: weekendRate * weekendsWorked
+  holidayAmount     Float        // Calculated amount: holidayRate * holidaysWorked
+  totalAmount       Float        // Total amount: weekendAmount + holidayAmount
+  notes             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@unique([employeeId, year, month])
 }

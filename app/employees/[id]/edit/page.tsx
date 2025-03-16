@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import EmployeeForm from '@/components/employees/EmployeeForm';
+import MonthlyRecordQuickAdd from '@/components/employees/MonthlyRecordQuickAdd';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -34,7 +35,15 @@ export default async function EditEmployeePage({ params }: PageProps) {
         <p className="text-gray-600">Edite os dados do funcionário {employee.name}.</p>
       </div>
       
-      <EmployeeForm employee={employee} isEditing={true} />
+      <div className="grid grid-cols-1 gap-6">
+        <EmployeeForm employee={employee} isEditing={true} />
+        
+        <MonthlyRecordQuickAdd 
+          employeeId={employee.id} 
+          weekendRate={employee.weekendRate} 
+          holidayRate={employee.holidayRate} 
+        />
+      </div>
     </main>
   );
 }

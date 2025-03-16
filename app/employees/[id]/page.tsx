@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import MonthlyRecordQuickAdd from '@/components/employees/MonthlyRecordQuickAdd';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,6 +57,12 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
           >
             Editar
           </Link>
+          <Link
+            href={`/employees/${employee.id}/monthly-records`}
+            className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
+          >
+            Registros Mensais
+          </Link>
         </div>
       </div>
       
@@ -103,19 +110,11 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
             </div>
             <div>
               <p className="text-sm text-gray-500">Taxa de Fim de Semana</p>
-              <p>{employee.weekendRate}%</p>
+              <p className="font-medium">{formatCurrency(employee.weekendRate)}</p>
             </div>
             <div>
               <p className="text-sm text-gray-500">Taxa de Feriado</p>
-              <p>{employee.holidayRate}%</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Fins de Semana Trabalhados</p>
-              <p>{employee.weekendsWorked}</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Feriados Trabalhados</p>
-              <p>{employee.holidaysWorked}</p>
+              <p className="font-medium">{formatCurrency(employee.holidayRate)}</p>
             </div>
           </div>
         </div>
@@ -170,6 +169,14 @@ export default async function EmployeeDetailPage({ params }: PageProps) {
               <p>{employee.bankPix}</p>
             </div>
           </div>
+        </div>
+        
+        <div className="lg:col-span-2">
+          <MonthlyRecordQuickAdd 
+            employeeId={employee.id} 
+            weekendRate={employee.weekendRate} 
+            holidayRate={employee.holidayRate} 
+          />
         </div>
       </div>
       
